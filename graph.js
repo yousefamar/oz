@@ -71,7 +71,16 @@ OZ.GraphScene = function () {
 OZ.GraphScene.prototype = Object.create(THREE.Scene.prototype);
 
 OZ.GraphScene.prototype.loadGraph = function (callback) {
-	callback();
+
+	var socket = io.connect('cyan.io:80');
+	socket.on('localGraph', function (graph) {
+		console.log(graph);
+
+		
+		
+		callback();
+	});
+	socket.emit('move', 0);
 };
 
 OZ.GraphScene.prototype.tick = function (delta) {
