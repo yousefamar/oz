@@ -36,7 +36,7 @@ var OZ = {};
 		
 
 		scene.loadGraph(function () {
-			camera.position.z = -100;
+			camera.position.z = -200;
 			camera.lookAt(new THREE.Vector3());
 			scene.focusedNode.mesh.add(camera);
 
@@ -65,6 +65,14 @@ var OZ = {};
 		OZ.gui.statsRender.begin();
 		var delta = animClock.getDelta();
 		scene.animate(delta);
+
+		// TODO: Make the camera push nodes away so they don't fly in your face.
+		camera.quaternion.x += 1;
+		camera.quaternion.y += 1;
+		camera.quaternion.z += 1;
+		camera.lookAt(new THREE.Vector3());
+
+
 		renderer.render(scene, camera);
 		OZ.gui.statsRender.end();
 	}

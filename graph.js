@@ -20,7 +20,7 @@ OZ.GraphScene.prototype.loadGraph = function (callback) {
 			node.linked = {};
 
 			var mesh = node.mesh = new THREE.Mesh(new THREE.SphereGeometry(1), new THREE.MeshBasicMaterial({ color: 0x00FFFF }));
-			mesh.position.set(Math.random()*500 - 250, Math.random()*500 - 250, 0);//Math.random()*5000 - 2500);
+			mesh.position.set(Math.random()*500 - 250, Math.random()*500 - 250, Math.random()*500 - 250);
 			mesh.netForce = new THREE.Vector3();
 			self.add(mesh);
 
@@ -34,8 +34,15 @@ OZ.GraphScene.prototype.loadGraph = function (callback) {
 
 			var link = graph.links[i];
 
-			tempIDMap[link.source].linked[link.target] = tempIDMap[link.target];
-			tempIDMap[link.target].linked[link.source] = tempIDMap[link.source];
+			tempIDMap[link.source].linked[link.target] = link.targetNode = tempIDMap[link.target];
+			tempIDMap[link.target].linked[link.source] = link.sourceNode = tempIDMap[link.source];
+
+			var geometry = new THREE.Geometry();
+			geometry.vertices.push(tempIDMap[link.source].mesh.position);
+			geometry.vertices.push(tempIDMap[link.target].mesh.position);
+
+			link.mesh = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: 0xC0C0C0 }));
+			self.add(link.mesh);
 		};
 
 		self.focusedNode = graph.nodes[0];
@@ -69,22 +76,22 @@ OZ.GraphScene.prototype.tick = function (delta) {
 
 			mesh0.netForce.x += dirX/distSq;
 			mesh0.netForce.y += dirY/distSq;
-			//mesh0.netForce.z += dirZ/distSq;
+			mesh0.netForce.z += dirZ/distSq;
 
 			mesh1.netForce.x -= dirX/distSq;
 			mesh1.netForce.y -= dirY/distSq;
-			//mesh1.netForce.z -= dirZ/distSq;
+			mesh1.netForce.z -= dirZ/distSq;
 
 			if (node1.id in node0.linked) {
-				var force = 0.001 * (dist - 10);
+				var force = 0.01 * (dist - 10);
 				
 				mesh1.netForce.x += dirX*force;
 				mesh1.netForce.y += dirY*force;
-				//mesh1.netForce.z += dirZ*force;
+				mesh1.netForce.z += dirZ*force;
 
 				mesh0.netForce.x -= dirX*force;
 				mesh0.netForce.y -= dirY*force;
-				//mesh0.netForce.z -= dirZ*force;
+				mesh0.netForce.z -= dirZ*force;
 			}
 		}
 	}
@@ -94,6 +101,14 @@ OZ.GraphScene.prototype.tick = function (delta) {
 
 		mesh.position.add(mesh.netForce);
 		mesh.netForce.set(0, 0, 0);
+	}
+
+	for (var i = 0, len0 = this.graph.links.length; i < len0; i++) {
+		var link = this.graph.links[i];
+
+		link.mesh.geometry.vertices[0].copy(link.sourceNode.mesh.position);
+		link.mesh.geometry.vertices[1].copy(link.targetNode.mesh.position);
+		link.mesh.geometry.verticesNeedUpdate = true;
 	}
 };
 
