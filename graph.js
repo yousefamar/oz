@@ -1,69 +1,5 @@
 OZ.graph = {};
 
-OZ.graph.Node = function (obj) {
-	this.label = obj.label || '';
-	this.desc = obj.desc || '';
-	this.parent = null;
-	this.children = [];
-	this.radius = 10;
-
-	for (var i = 0, len = obj.children.length; i < len; i++)
-		this.addChild(new OZ.graph.Node(obj.children[i]));
-	
-	this.x = OZ.canvasWidth/2 + Math.random()*500 - 250;
-	this.y = OZ.canvasHeight/2 + Math.random()*500 - 250;
-	this.netForce = { x: 0, y: 0 };
-};
-
-OZ.graph.Node.prototype.addChild = function (child) {
-	child.parent = this;
-	this.children.push(child);
-	return this;
-};
-
-OZ.graph.Node.prototype.forEachPre = function (func) {
-	if (func(this))
-		return true;
-	for (var i = 0, len = this.children.length; i < len; i++)
-		if (this.children[i].forEachPre(func))
-			return true;
-};
-
-OZ.graph.Node.prototype.forEachPost = function (func) {
-	for (var i = 0, len = this.children.length; i < len; i++)
-		if (this.children[i].forEachPost(func))
-			return true;
-	if (func(this))
-		return true;
-};
-
-OZ.graph.Node.prototype.distTo = function (node) {
-	return Math.sqrt((node.x - this.x)*(node.x - this.x) + (node.y - this.y)*(node.y - this.y));
-};
-
-OZ.graph.Node.prototype.addForce = function (otherNode) {
-	var dist = this.distTo(otherNode) || 0.0001;
-	var distX = (this.x - otherNode.x) || 0.0001, distY = (this.y - otherNode.y) || 0.0001;
-	var dirX = distX/dist, dirY = distY/dist;
-
-	this.netForce.x += 100*this.radius*otherNode.radius*dirX/(dist*dist);
-	this.netForce.y += 100*this.radius*otherNode.radius*dirY/(dist*dist);
-
-	if (this.children.indexOf(otherNode) >= 0) {
-		var force = 0.1 * (dist - 100);
-
-		otherNode.netForce.x += dirX*force;
-		otherNode.netForce.y += dirY*force;
-
-		this.netForce.x -= dirX*force;
-		this.netForce.y -= dirY*force;
-	}
-};
-
-OZ.graph.Node.prototype.contains = function (x, y) {
-	return Math.sqrt((x - this.x)*(x - this.x) + (y - this.y)*(y - this.y)) <= this.radius;
-};
-
 OZ.GraphScene = function () {
 	THREE.Scene.call(this);
 };
@@ -71,20 +7,94 @@ OZ.GraphScene = function () {
 OZ.GraphScene.prototype = Object.create(THREE.Scene.prototype);
 
 OZ.GraphScene.prototype.loadGraph = function (callback) {
+	var self = this;
 
 	var socket = io.connect('cyan.io:80');
 	socket.on('localGraph', function (graph) {
+		self.graph = graph;
+
+		var tempIDMap = {};
+
+		for (var i = 0, len = graph.nodes.length; i < len; i++) {
+			var node = graph.nodes[i];
+			node.linked = {};
+
+			var mesh = node.mesh = new THREE.Mesh(new THREE.SphereGeometry(1), new THREE.MeshBasicMaterial({ color: 0x00FFFF }));
+			mesh.position.set(Math.random()*500 - 250, Math.random()*500 - 250, 0);//Math.random()*5000 - 2500);
+			mesh.netForce = new THREE.Vector3();
+			self.add(mesh);
+
+			tempIDMap[node.id] = node;
+		};
+
+		for (var i = 0, len = graph.links.length; i < len; i++) {
+			// var mesh = graph.nodes[i].mesh = new THREE.SphereMesh(new THREE.SphereGeometry(0.1), new THREE.MeshPhongMaterial({ color: 0x00FFFF }));
+			// mesh.position.set(Math.random()*5000 - 2500, Math.random()*5000 - 2500, Math.random()*5000 - 2500);
+			// mesh.netForce = new THREE.Vector3();
+
+			var link = graph.links[i];
+
+			tempIDMap[link.source].linked[link.target] = tempIDMap[link.target];
+			tempIDMap[link.target].linked[link.source] = tempIDMap[link.source];
+		};
+
+		self.focusedNode = graph.nodes[0];
+
 		console.log(graph);
 
-		
-		
 		callback();
 	});
 	socket.emit('move', 0);
 };
 
 OZ.GraphScene.prototype.tick = function (delta) {
-	
+	// I can't believe this worked the first try...
+
+	for (var i = 0, len0 = this.graph.nodes.length; i < len0; i++) {
+		var node0 = this.graph.nodes[i];
+		var mesh0 = node0.mesh;
+
+		for (var j = i+1, len1 = this.graph.nodes.length; j < len1; j++) {
+			var node1 = this.graph.nodes[j];
+			var mesh1 = node1.mesh;
+
+			var dist = mesh0.position.distanceTo(mesh1.position) || 0.0001;
+			var distSq = dist*dist;
+
+			var distX = (mesh0.position.x - mesh1.position.x) || 0.0001;
+			var distY = (mesh0.position.y - mesh1.position.y) || 0.0001;
+			var distZ = (mesh0.position.z - mesh1.position.y) || 0.0001;
+
+			var dirX = distX/dist, dirY = distY/dist, dirZ = distZ/dist;
+
+			mesh0.netForce.x += dirX/distSq;
+			mesh0.netForce.y += dirY/distSq;
+			//mesh0.netForce.z += dirZ/distSq;
+
+			mesh1.netForce.x -= dirX/distSq;
+			mesh1.netForce.y -= dirY/distSq;
+			//mesh1.netForce.z -= dirZ/distSq;
+
+			if (node1.id in node0.linked) {
+				var force = 0.001 * (dist - 10);
+				
+				mesh1.netForce.x += dirX*force;
+				mesh1.netForce.y += dirY*force;
+				//mesh1.netForce.z += dirZ*force;
+
+				mesh0.netForce.x -= dirX*force;
+				mesh0.netForce.y -= dirY*force;
+				//mesh0.netForce.z -= dirZ*force;
+			}
+		}
+	}
+
+	for (var i = 0, len0 = this.graph.nodes.length; i < len0; i++) {
+		var mesh = this.graph.nodes[i].mesh;
+
+		mesh.position.add(mesh.netForce);
+		mesh.netForce.set(0, 0, 0);
+	}
 };
 
 OZ.GraphScene.prototype.animate = function (delta) {

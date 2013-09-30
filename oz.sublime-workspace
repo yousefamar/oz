@@ -523,7 +523,7 @@
 			"file": "index.html",
 			"settings":
 			{
-				"buffer_size": 423,
+				"buffer_size": 465,
 				"line_ending": "Unix"
 			}
 		},
@@ -531,7 +531,7 @@
 			"file": "oz.js",
 			"settings":
 			{
-				"buffer_size": 1581,
+				"buffer_size": 1544,
 				"line_ending": "Unix"
 			}
 		},
@@ -539,7 +539,7 @@
 			"file": "style.scss",
 			"settings":
 			{
-				"buffer_size": 473,
+				"buffer_size": 452,
 				"line_ending": "Unix"
 			}
 		},
@@ -547,7 +547,7 @@
 			"file": "style.css",
 			"settings":
 			{
-				"buffer_size": 462,
+				"buffer_size": 416,
 				"line_ending": "Unix"
 			}
 		},
@@ -560,10 +560,13 @@
 			}
 		},
 		{
+			"contents": "OZ.graph = {};\n\nOZ.graph.Node = function (obj) {\n	this.id = id;\n	this.text = \n\n	for (var i = 0, len = obj.children.length; i < len; i++)\n		this.addChild(new OZ.graph.Node(obj.children[i]));\n	\n	this.x = OZ.canvasWidth/2 + Math.random()*500 - 250;\n	this.y = OZ.canvasHeight/2 + Math.random()*500 - 250;\n	this.netForce = { x: 0, y: 0 };\n};\n\nOZ.graph.Node.prototype.addChild = function (child) {\n	child.parent = this;\n	this.children.push(child);\n	return this;\n};\n\nOZ.graph.Node.prototype.forEachPre = function (func) {\n	if (func(this))\n		return true;\n	for (var i = 0, len = this.children.length; i < len; i++)\n		if (this.children[i].forEachPre(func))\n			return true;\n};\n\nOZ.graph.Node.prototype.forEachPost = function (func) {\n	for (var i = 0, len = this.children.length; i < len; i++)\n		if (this.children[i].forEachPost(func))\n			return true;\n	if (func(this))\n		return true;\n};\n\nOZ.graph.Node.prototype.distTo = function (node) {\n	return Math.sqrt((node.x - this.x)*(node.x - this.x) + (node.y - this.y)*(node.y - this.y));\n};\n\nOZ.graph.Node.prototype.addForce = function (otherNode) {\n	var dist = this.distTo(otherNode) || 0.0001;\n	var distX = (this.x - otherNode.x) || 0.0001, distY = (this.y - otherNode.y) || 0.0001;\n	var dirX = distX/dist, dirY = distY/dist;\n\n	this.netForce.x += 100*this.radius*otherNode.radius*dirX/(dist*dist);\n	this.netForce.y += 100*this.radius*otherNode.radius*dirY/(dist*dist);\n\n	if (this.children.indexOf(otherNode) >= 0) {\n		var force = 0.1 * (dist - 100);\n\n		otherNode.netForce.x += dirX*force;\n		otherNode.netForce.y += dirY*force;\n\n		this.netForce.x -= dirX*force;\n		this.netForce.y -= dirY*force;\n	}\n};\n\nOZ.graph.Node.prototype.contains = function (x, y) {\n	return Math.sqrt((x - this.x)*(x - this.x) + (y - this.y)*(y - this.y)) <= this.radius;\n};\n\nOZ.GraphScene = function () {\n	THREE.Scene.call(this);\n};\n\nOZ.GraphScene.prototype = Object.create(THREE.Scene.prototype);\n\nOZ.GraphScene.prototype.loadGraph = function (callback) {\n\n	var socket = io.connect('cyan.io:80');\n	socket.on('localGraph', function (graph) {\n		console.log(graph);\n\n		for (var i = 0, len = graph.nodes; i < len; i++) {\n			graph.nodes[i].mesh = new THREE.\n		};\n\n		callback();\n	});\n	socket.emit('move', 0);\n};\n\nOZ.GraphScene.prototype.tick = function (delta) {\n	\n};\n\nOZ.GraphScene.prototype.animate = function (delta) {\n	\n};",
 			"file": "graph.js",
+			"file_size": 2331,
+			"file_write_time": 130250454360000000,
 			"settings":
 			{
-				"buffer_size": 2186,
+				"buffer_size": 2328,
 				"line_ending": "Unix"
 			}
 		}
@@ -949,7 +952,7 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 5,
 			"sheets":
 			[
 				{
@@ -958,15 +961,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 423,
+						"buffer_size": 465,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								154,
-								154
+								274,
+								274
 							]
 						],
 						"settings":
@@ -986,15 +989,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1581,
+						"buffer_size": 1544,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								791,
-								791
+								761,
+								761
 							]
 						],
 						"settings":
@@ -1003,7 +1006,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 101.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1014,15 +1017,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 473,
+						"buffer_size": 452,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								326,
-								326
+								3,
+								3
 							]
 						],
 						"settings":
@@ -1042,7 +1045,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 462,
+						"buffer_size": 416,
 						"regions":
 						{
 						},
@@ -1099,15 +1102,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2186,
+						"buffer_size": 2328,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2068,
-								2068
+								2160,
+								2160
 							]
 						],
 						"settings":
@@ -1117,7 +1120,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 12.0,
+						"translation.y": 521.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

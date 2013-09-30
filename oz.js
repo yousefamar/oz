@@ -26,7 +26,20 @@ var OZ = {};
 
 		scene = new OZ.GraphScene();
 
+		//scene.add(new THREE.Mesh(new THREE.SphereGeometry(1), new THREE.MeshBasicMaterial({ color: 0x00FFFF })));
+
+		// var light = new THREE.PointLight(0xFFFFFF);
+		// light.position.set(0, 10, 0);
+		// scene.add(light);
+
+		scene.add(camera);
+		
+
 		scene.loadGraph(function () {
+			camera.position.z = -100;
+			camera.lookAt(new THREE.Vector3());
+			scene.focusedNode.mesh.add(camera);
+
 			setTimeout(tick, TICK_INTERVAL_MS);
 			requestAnimationFrame(render);
 		});
