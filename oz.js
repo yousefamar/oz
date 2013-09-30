@@ -4,11 +4,9 @@ var OZ = {};
 
 	var TICK_INTERVAL_MS = 1000.0/60.0;
 
-	var renderer, camera, scene;
+	var renderer, camera, camRig, scene;
 
 	function init() {
-		OZ.gui.init();
-
 		renderer = new THREE.WebGLRenderer({ antialias: true });
 		renderer.setSize((this.canvasWidth = window.innerWidth), (this.canvasHeight = window.innerHeight));
 		renderer.shadowMapEnabled = true;
@@ -32,13 +30,21 @@ var OZ = {};
 		// light.position.set(0, 10, 0);
 		// scene.add(light);
 
-		scene.add(camera);
-		
+		camRig = OZ.camRig = {
+			yawObj: new THREE.Object3D(),
+			pitchObj: new THREE.Object3D()
+		};
+		camRig.yawObj.add(camRig.pitchObj);
+		camRig.pitchObj.add(camera);
+
 
 		scene.loadGraph(function () {
-			camera.position.z = -200;
+			camera.position.z = -150;
 			camera.lookAt(new THREE.Vector3());
-			scene.focusedNode.mesh.add(camera);
+			scene.focusedNode.mesh.add(camRig.yawObj);
+
+			OZ.gui.init();
+			OZ.input.init();
 
 			setTimeout(tick, TICK_INTERVAL_MS);
 			requestAnimationFrame(render);
@@ -67,10 +73,7 @@ var OZ = {};
 		scene.animate(delta);
 
 		// TODO: Make the camera push nodes away so they don't fly in your face.
-		camera.quaternion.x += 1;
-		camera.quaternion.y += 1;
-		camera.quaternion.z += 1;
-		camera.lookAt(new THREE.Vector3());
+		camRig.yawObj.rotation.y += 0.5 * (Math.PI/180) * (delta/1000);
 
 
 		renderer.render(scene, camera);

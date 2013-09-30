@@ -70,7 +70,7 @@ OZ.GraphScene.prototype.tick = function (delta) {
 
 			var distX = (mesh0.position.x - mesh1.position.x) || 0.0001;
 			var distY = (mesh0.position.y - mesh1.position.y) || 0.0001;
-			var distZ = (mesh0.position.z - mesh1.position.y) || 0.0001;
+			var distZ = (mesh0.position.z - mesh1.position.z) || 0.0001;
 
 			var dirX = distX/dist, dirY = distY/dist, dirZ = distZ/dist;
 
