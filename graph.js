@@ -19,8 +19,8 @@ OZ.GraphScene.prototype.loadGraph = function (callback) {
 			var node = graph.nodes[i];
 			node.linked = {};
 
-			var mesh = node.mesh = new THREE.Mesh(new THREE.SphereGeometry(1), new THREE.MeshBasicMaterial({ color: 0x00FFFF }));
-			mesh.position.set(Math.random()*500 - 250, Math.random()*500 - 250, Math.random()*500 - 250);
+			var mesh = node.mesh = new THREE.Mesh(new THREE.SphereGeometry(1), new THREE.MeshPhongMaterial({ color: 0x00FFFF }));
+			mesh.position.set(Math.random()*200 - 100, Math.random()*200 - 100, Math.random()*200 - 100);
 			mesh.netForce = new THREE.Vector3();
 			self.add(mesh);
 
@@ -28,10 +28,6 @@ OZ.GraphScene.prototype.loadGraph = function (callback) {
 		};
 
 		for (var i = 0, len = graph.links.length; i < len; i++) {
-			// var mesh = graph.nodes[i].mesh = new THREE.SphereMesh(new THREE.SphereGeometry(0.1), new THREE.MeshPhongMaterial({ color: 0x00FFFF }));
-			// mesh.position.set(Math.random()*5000 - 2500, Math.random()*5000 - 2500, Math.random()*5000 - 2500);
-			// mesh.netForce = new THREE.Vector3();
-
 			var link = graph.links[i];
 
 			tempIDMap[link.source].linked[link.target] = link.targetNode = tempIDMap[link.target];
@@ -114,4 +110,19 @@ OZ.GraphScene.prototype.tick = function (delta) {
 
 OZ.GraphScene.prototype.animate = function (delta) {
 	
+};
+
+OZ.GraphScene.prototype.setHoveredNode = function(node) {
+	if (node === this.hoveredNode) return;
+
+	if (this.hoveredNode) {
+		this.hoveredNode.scale.set(1, 1, 1);
+		this.hoveredNode.material.color.setHex(0x00FFFF);
+	}
+	if (node) {
+		node.scale.set(2, 2, 2);
+		node.material.color.setHex(0xFFFF00);
+	}
+
+	this.hoveredNode = node;
 };

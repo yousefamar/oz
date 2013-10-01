@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"ca",
+				"camera"
+			],
+			[
+				"in",
+				"input"
+			],
+			[
 				"camR",
 				"camRig"
 			],
@@ -186,10 +194,6 @@
 			[
 				"camp",
 				"camPivotY"
-			],
-			[
-				"ca",
-				"camPivot"
 			],
 			[
 				"camera",
@@ -510,10 +514,6 @@
 			[
 				"max",
 				"maxHeight"
-			],
-			[
-				"ha",
-				"halfHeight"
 			]
 		]
 	},
@@ -531,7 +531,7 @@
 			"file": "oz.js",
 			"settings":
 			{
-				"buffer_size": 2219,
+				"buffer_size": 2125,
 				"line_ending": "Unix"
 			}
 		},
@@ -539,7 +539,7 @@
 			"file": "input.js",
 			"settings":
 			{
-				"buffer_size": 1307,
+				"buffer_size": 2201,
 				"line_ending": "Unix"
 			}
 		},
@@ -571,7 +571,7 @@
 			"file": "graph.js",
 			"settings":
 			{
-				"buffer_size": 3505,
+				"buffer_size": 3213,
 				"line_ending": "Unix"
 			}
 		}
@@ -812,6 +812,11 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"canvasW",
+			"this",
+			"canvasWid",
+			"OZ",
+			"sunDirLight",
 			"camera",
 			"quaternion",
 			"up",
@@ -934,12 +939,7 @@
 			"reportC",
 			"report",
 			"touches",
-			"setCol",
-			"type",
-			"flag",
-			"collider",
-			"jump",
-			"constraint"
+			"setCol"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -994,15 +994,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2219,
+						"buffer_size": 2125,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2095,
-								2095
+								234,
+								234
 							]
 						],
 						"settings":
@@ -1011,7 +1011,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 391.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1022,15 +1022,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1307,
+						"buffer_size": 2201,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								826,
-								826
+								1873,
+								1873
 							]
 						],
 						"settings":
@@ -1135,15 +1135,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3505,
+						"buffer_size": 3213,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2373,
-								2373
+								73,
+								73
 							]
 						],
 						"settings":
@@ -1153,7 +1153,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 927.0,
+						"translation.y": 542.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
