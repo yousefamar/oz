@@ -52,7 +52,7 @@ OZ.GraphScene.prototype.loadGraph = function (callback) {
 	socket.emit('move', 0);
 };
 
-OZ.GraphScene.prototype.tick = function (delta) {
+OZ.GraphScene.prototype.tick = function () {
 	// I can't believe this worked the first try...
 
 	for (var i = 0, len0 = this.graph.nodes.length; i < len0; i++) {

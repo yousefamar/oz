@@ -1,6 +1,8 @@
+'use strict';
+
 var OZ = {};
 
-(function (canvas) {
+(function () {
 
 	var TICK_INTERVAL_MS = 1000.0/60.0;
 

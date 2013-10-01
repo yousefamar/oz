@@ -5,7 +5,11 @@
 		[
 			[
 				"fo",
-				"focused"
+				"focusedNode"
+			],
+			[
+				"f",
+				"f	Anonymous Function"
 			],
 			[
 				"p",
@@ -78,10 +82,6 @@
 			[
 				"re",
 				"registrationInfo"
-			],
-			[
-				"f",
-				"function"
 			],
 			[
 				"cre",
@@ -531,7 +531,7 @@
 			"file": "oz.js",
 			"settings":
 			{
-				"buffer_size": 2663,
+				"buffer_size": 2678,
 				"line_ending": "Unix"
 			}
 		},
@@ -547,15 +547,24 @@
 			"file": "style.scss",
 			"settings":
 			{
-				"buffer_size": 492,
+				"buffer_size": 664,
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "uglifyjs src/utils.js \\\nsrc/net.js \\\nsrc/gui.js \\\nsrc/shaders.js \\\nsrc/input.js \\\nsrc/audio.js \\\nsrc/models.js \\\nsrc/world.js \\\nsrc/entities.js \\\nsrc/animation.js \\\nsrc/player.js \\\nsrc/main.js \\\n-o build/game.min.js \\\n--source-map build/game.min.js.map \\\n--source-map-root http://localhost:8000/build \\\n--screw-ie8 -p relative -c -v",
+			"settings":
+			{
+				"buffer_size": 332,
+				"line_ending": "Unix",
+				"name": "uglifyjs src/utils.js \\"
 			}
 		},
 		{
 			"file": "style.css",
 			"settings":
 			{
-				"buffer_size": 430,
+				"buffer_size": 566,
 				"line_ending": "Unix"
 			}
 		},
@@ -563,7 +572,7 @@
 			"file": "gui.js",
 			"settings":
 			{
-				"buffer_size": 648,
+				"buffer_size": 740,
 				"line_ending": "Unix"
 			}
 		},
@@ -571,7 +580,7 @@
 			"file": "graph.js",
 			"settings":
 			{
-				"buffer_size": 4215,
+				"buffer_size": 4230,
 				"line_ending": "Unix"
 			}
 		}
@@ -812,6 +821,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"focusedNode",
 			"'",
 			"x",
 			"speed",
@@ -938,8 +948,7 @@
 			"camera.parent.",
 			"player.head.",
 			"object1",
-			"j",
-			"i"
+			"j"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -957,7 +966,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -973,7 +982,7 @@
 						"selection":
 						[
 							[
-								595,
+								587,
 								595
 							]
 						],
@@ -994,15 +1003,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2663,
+						"buffer_size": 2678,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1806,
-								1806
+								13,
+								13
 							]
 						],
 						"settings":
@@ -1011,7 +1020,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 296.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1029,8 +1038,8 @@
 						"selection":
 						[
 							[
-								973,
-								973
+								12,
+								12
 							]
 						],
 						"settings":
@@ -1050,15 +1059,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 492,
+						"buffer_size": 664,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								280,
-								280
+								265,
+								265
 							]
 						],
 						"settings":
@@ -1074,11 +1083,38 @@
 				},
 				{
 					"buffer": 4,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 332,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								23,
+								23
+							]
+						],
+						"settings":
+						{
+							"auto_name": "uglifyjs src/utils.js \\",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
 					"file": "style.css",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 430,
+						"buffer_size": 566,
 						"regions":
 						{
 						},
@@ -1102,20 +1138,20 @@
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 6,
 					"file": "gui.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 648,
+						"buffer_size": 740,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								498,
-								498
+								716,
+								716
 							]
 						],
 						"settings":
@@ -1130,20 +1166,20 @@
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 7,
 					"file": "graph.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4215,
+						"buffer_size": 4230,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1480,
-								1480
+								4181,
+								4181
 							]
 						],
 						"settings":
@@ -1153,7 +1189,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 178.0,
+						"translation.y": 1346.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

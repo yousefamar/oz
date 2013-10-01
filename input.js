@@ -63,7 +63,7 @@ OZ.input = {
 		};
 	})(),
 
-	mouseup: function (event) {
+	mouseup: function () {
 		OZ.input.isMouseDown = false;
 	},
 
