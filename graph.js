@@ -41,7 +41,7 @@ OZ.GraphScene.prototype.loadGraph = function (callback) {
 			geometry.vertices.push(tempIDMap[link.source].mesh.position);
 			geometry.vertices.push(tempIDMap[link.target].mesh.position);
 
-			link.mesh = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: 0xC0C0C0 }));
+			link.mesh = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: 0xC0C0C0, transparent: true, opacity: 0.5 }));
 			self.add(link.mesh);
 		};
 
