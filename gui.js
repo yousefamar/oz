@@ -1,5 +1,4 @@
 OZ.gui = {
-
 	init: function () {
 		var overlay = document.getElementById('overlay');
 		this.statsTick = new Stats();
@@ -16,5 +15,9 @@ OZ.gui = {
 		
 		overlay.insertBefore(this.statsRender.domElement, overlay.firstChild);
 		overlay.insertBefore(this.statsTick.domElement, overlay.firstChild);
+	},
+
+	setNodeText: function (text) {
+		document.getElementById('nodeText').innerHTML = text;
 	}
 };

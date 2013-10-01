@@ -47,8 +47,6 @@ OZ.GraphScene.prototype.loadGraph = function (callback) {
 
 		self.focusedNode = graph.nodes[0];
 
-		//console.log(graph);
-
 		callback();
 	});
 	socket.emit('move', 0);
@@ -142,6 +140,7 @@ OZ.GraphScene.prototype.setHoveredNode = function(node) {
 	if (node) {
 		node.scale.set(2, 2, 2);
 		node.material.color.setHex(0xFFFF00);
+		OZ.gui.setNodeText(node.node.text);
 	}
 
 	this.hoveredNode = node;

@@ -523,7 +523,7 @@
 			"file": "index.html",
 			"settings":
 			{
-				"buffer_size": 499,
+				"buffer_size": 627,
 				"line_ending": "Unix"
 			}
 		},
@@ -531,7 +531,7 @@
 			"file": "oz.js",
 			"settings":
 			{
-				"buffer_size": 2615,
+				"buffer_size": 2663,
 				"line_ending": "Unix"
 			}
 		},
@@ -547,7 +547,7 @@
 			"file": "style.scss",
 			"settings":
 			{
-				"buffer_size": 452,
+				"buffer_size": 492,
 				"line_ending": "Unix"
 			}
 		},
@@ -555,7 +555,7 @@
 			"file": "style.css",
 			"settings":
 			{
-				"buffer_size": 416,
+				"buffer_size": 430,
 				"line_ending": "Unix"
 			}
 		},
@@ -563,18 +563,15 @@
 			"file": "gui.js",
 			"settings":
 			{
-				"buffer_size": 600,
+				"buffer_size": 648,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "OZ.graph = {};\n\nOZ.GraphScene = function () {\n	THREE.Scene.call(this);\n\n	this.springSize = 10;\n};\n\nOZ.GraphScene.prototype = Object.create(THREE.Scene.prototype);\n\nOZ.GraphScene.prototype.loadGraph = function (callback) {\n	var self = this;\n\n	var socket = io.connect('cyan.io:80');\n	socket.on('localGraph', function (graph) {\n		self.graph = graph;\n\n		var tempIDMap = {};\n\n		for (var i = 0, len = graph.nodes.length; i < len; i++) {\n			var node = graph.nodes[i];\n			node.linked = {};\n\n			var mesh = node.mesh = new THREE.Mesh(new THREE.SphereGeometry(1), new THREE.MeshPhongMaterial({ color: 0x00FFFF }));\n			mesh.position.set(Math.random()*200 - 100, Math.random()*200 - 100, Math.random()*200 - 100);\n			mesh.netForce = new THREE.Vector3();\n			mesh.node = node;\n			self.add(mesh);\n\n			tempIDMap[node.id] = node;\n		};\n\n		for (var i = 0, len = graph.links.length; i < len; i++) {\n			var link = graph.links[i];\n\n			tempIDMap[link.source].linked[link.target] = link.targetNode = tempIDMap[link.target];\n			tempIDMap[link.target].linked[link.source] = link.sourceNode = tempIDMap[link.source];\n\n			var geometry = new THREE.Geometry();\n			geometry.vertices.push(tempIDMap[link.source].mesh.position);\n			geometry.vertices.push(tempIDMap[link.target].mesh.position);\n\n			link.mesh = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: 0xC0C0C0 }));\n			self.add(link.mesh);\n		};\n\n		self.focusedNode = graph.nodes[0];\n\n		//console.log(graph);\n\n		callback();\n	});\n	socket.emit('move', 0);\n};\n\nOZ.GraphScene.prototype.tick = function (delta) {\n	// I can't believe this worked the first try...\n\n	for (var i = 0, len0 = this.graph.nodes.length; i < len0; i++) {\n		var node0 = this.graph.nodes[i];\n		var mesh0 = node0.mesh;\n\n		for (var j = i+1, len1 = this.graph.nodes.length; j < len1; j++) {\n			var node1 = this.graph.nodes[j];\n			var mesh1 = node1.mesh;\n\n			var dist = mesh0.position.distanceTo(mesh1.position) || 0.0001;\n			var distSq = dist*dist;\n\n			var distX = (mesh0.position.x - mesh1.position.x) || 0.0001;\n			var distY = (mesh0.position.y - mesh1.position.y) || 0.0001;\n			var distZ = (mesh0.position.z - mesh1.position.z) || 0.0001;\n\n			var dirX = distX/dist, dirY = distY/dist, dirZ = distZ/dist;\n\n			mesh0.netForce.x += dirX/distSq;\n			mesh0.netForce.y += dirY/distSq;\n			mesh0.netForce.z += dirZ/distSq;\n\n			mesh1.netForce.x -= dirX/distSq;\n			mesh1.netForce.y -= dirY/distSq;\n			mesh1.netForce.z -= dirZ/distSq;\n\n			if (node1.id in node0.linked) {\n				var force = 0.01 * (dist - this.springSize);\n				\n				mesh1.netForce.x += dirX*force;\n				mesh1.netForce.y += dirY*force;\n				mesh1.netForce.z += dirZ*force;\n\n				mesh0.netForce.x -= dirX*force;\n				mesh0.netForce.y -= dirY*force;\n				mesh0.netForce.z -= dirZ*force;\n			}\n		}\n	}\n\n	for (var i = 0, len0 = this.graph.nodes.length; i < len0; i++) {\n		var mesh = this.graph.nodes[i].mesh;\n\n		mesh.position.add(mesh.netForce);\n		mesh.netForce.set(0, 0, 0);\n	}\n\n	for (var i = 0, len0 = this.graph.links.length; i < len0; i++) {\n		var link = this.graph.links[i];\n\n		link.mesh.geometry.vertices[0].copy(link.sourceNode.mesh.position);\n		link.mesh.geometry.vertices[1].copy(link.targetNode.mesh.position);\n		link.mesh.geometry.verticesNeedUpdate = true;\n	}\n\n\n	var camSpeed = 0.05;\n	OZ.camRig.yawObj.position.x += camSpeed * (this.focusedNode.mesh.position.x - OZ.camRig.yawObj.position.x);\n	OZ.camRig.yawObj.position.y += camSpeed * (this.focusedNode.mesh.position.y - OZ.camRig.yawObj.position.y);\n	OZ.camRig.yawObj.position.z += camSpeed * (this.focusedNode.mesh.position.z - OZ.camRig.yawObj.position.z);\n};\n\nOZ.GraphScene.prototype.animate = function (delta) {\n	if ()\n};\n\nOZ.GraphScene.prototype.setHoveredNode = function(node) {\n	if (node === this.hoveredNode) return;\n\n	if (this.hoveredNode) {\n		this.hoveredNode.scale.set(1, 1, 1);\n		this.hoveredNode.material.color.setHex(0x00FFFF);\n	}\n	if (node) {\n		node.scale.set(2, 2, 2);\n		node.material.color.setHex(0xFFFF00);\n	}\n\n	this.hoveredNode = node;\n};",
 			"file": "graph.js",
-			"file_size": 3919,
-			"file_write_time": 130251201700000000,
 			"settings":
 			{
-				"buffer_size": 3961,
+				"buffer_size": 4215,
 				"line_ending": "Unix"
 			}
 		}
@@ -815,6 +812,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"'",
 			"x",
 			"speed",
 			"200",
@@ -941,8 +939,7 @@
 			"player.head.",
 			"object1",
 			"j",
-			"i",
-			"object"
+			"i"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -960,7 +957,7 @@
 	"groups":
 	[
 		{
-			"selected": 6,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -969,15 +966,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 499,
+						"buffer_size": 627,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								409,
-								409
+								595,
+								595
 							]
 						],
 						"settings":
@@ -997,15 +994,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2615,
+						"buffer_size": 2663,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1680,
-								1680
+								1806,
+								1806
 							]
 						],
 						"settings":
@@ -1014,7 +1011,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 296.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1042,7 +1039,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 327.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1053,15 +1050,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 452,
+						"buffer_size": 492,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								184,
-								184
+								280,
+								280
 							]
 						],
 						"settings":
@@ -1081,7 +1078,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 416,
+						"buffer_size": 430,
 						"regions":
 						{
 						},
@@ -1110,15 +1107,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 600,
+						"buffer_size": 648,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								600,
-								0
+								498,
+								498
 							]
 						],
 						"settings":
@@ -1138,15 +1135,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3961,
+						"buffer_size": 4215,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3626,
-								3626
+								1480,
+								1480
 							]
 						],
 						"settings":
@@ -1156,7 +1153,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1211.0,
+						"translation.y": 178.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
