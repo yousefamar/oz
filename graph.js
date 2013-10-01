@@ -2,6 +2,9 @@ OZ.graph = {};
 
 OZ.GraphScene = function () {
 	THREE.Scene.call(this);
+
+	this.springSize = 10;
+	this.lastPulseTime = 0;
 };
 
 OZ.GraphScene.prototype = Object.create(THREE.Scene.prototype);
@@ -80,7 +83,7 @@ OZ.GraphScene.prototype.tick = function (delta) {
 			mesh1.netForce.z -= dirZ/distSq;
 
 			if (node1.id in node0.linked) {
-				var force = 0.01 * (dist - 10);
+				var force = 0.01 * (dist - this.springSize);
 				
 				mesh1.netForce.x += dirX*force;
 				mesh1.netForce.y += dirY*force;
@@ -113,10 +116,18 @@ OZ.GraphScene.prototype.tick = function (delta) {
 	OZ.camRig.yawObj.position.x += camSpeed * (this.focusedNode.mesh.position.x - OZ.camRig.yawObj.position.x);
 	OZ.camRig.yawObj.position.y += camSpeed * (this.focusedNode.mesh.position.y - OZ.camRig.yawObj.position.y);
 	OZ.camRig.yawObj.position.z += camSpeed * (this.focusedNode.mesh.position.z - OZ.camRig.yawObj.position.z);
+
+	if (this.springSize < 10)
+		this.springSize += 2;
 };
 
 OZ.GraphScene.prototype.animate = function (delta) {
+	this.lastPulseTime += delta;
 	
+	if (this.lastPulseTime > 5) {
+		this.springSize = -10;
+		this.lastPulseTime = 0;
+	}
 };
 
 OZ.GraphScene.prototype.setHoveredNode = function(node) {
