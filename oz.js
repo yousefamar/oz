@@ -45,14 +45,13 @@ var OZ = {};
 			pitchObj: new THREE.Object3D()
 		};
 		camRig.yawObj.add(camRig.pitchObj);
+		camera.position.z = 150;
+		camera.lookAt(new THREE.Vector3());
 		camRig.pitchObj.add(camera);
+		scene.add(camRig.yawObj);
 
 
 		scene.loadGraph(function () {
-			camera.position.z = 150;
-			camera.lookAt(new THREE.Vector3());
-			scene.focusedNode.mesh.add(camRig.yawObj);
-
 			self.gui.init();
 			self.input.init();
 

@@ -22,6 +22,7 @@ OZ.GraphScene.prototype.loadGraph = function (callback) {
 			var mesh = node.mesh = new THREE.Mesh(new THREE.SphereGeometry(1), new THREE.MeshPhongMaterial({ color: 0x00FFFF }));
 			mesh.position.set(Math.random()*200 - 100, Math.random()*200 - 100, Math.random()*200 - 100);
 			mesh.netForce = new THREE.Vector3();
+			mesh.node = node;
 			self.add(mesh);
 
 			tempIDMap[node.id] = node;
@@ -43,7 +44,7 @@ OZ.GraphScene.prototype.loadGraph = function (callback) {
 
 		self.focusedNode = graph.nodes[0];
 
-		console.log(graph);
+		//console.log(graph);
 
 		callback();
 	});
@@ -106,6 +107,12 @@ OZ.GraphScene.prototype.tick = function (delta) {
 		link.mesh.geometry.vertices[1].copy(link.targetNode.mesh.position);
 		link.mesh.geometry.verticesNeedUpdate = true;
 	}
+
+
+	var camSpeed = 0.05;
+	OZ.camRig.yawObj.position.x += camSpeed * (this.focusedNode.mesh.position.x - OZ.camRig.yawObj.position.x);
+	OZ.camRig.yawObj.position.y += camSpeed * (this.focusedNode.mesh.position.y - OZ.camRig.yawObj.position.y);
+	OZ.camRig.yawObj.position.z += camSpeed * (this.focusedNode.mesh.position.z - OZ.camRig.yawObj.position.z);
 };
 
 OZ.GraphScene.prototype.animate = function (delta) {

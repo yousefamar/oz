@@ -17,6 +17,8 @@ OZ.input = {
 		OZ.input.mouseY = event.offsetY||event.layerY||0;
 
 		OZ.input.isMouseDown = true;
+
+		OZ.scene.hoveredNode && (OZ.scene.focusedNode = OZ.scene.hoveredNode.node);
 	},
 
 	mousemove: (function () {
