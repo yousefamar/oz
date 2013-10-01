@@ -14,7 +14,9 @@
 	<script src="gui.js"></script>
 	<script src="input.js"></script>
 </head>
-<body onload="OZ.main()">
-	<div id="overlay"></div>
+<body onload="OZ.main();">
+	<div id="overlay">
+		<label><input type="checkbox" onclick="OZ.scene.isPulseEnabled = this.checked;"> Pulse</label>
+	</div>
 </body>
 </html>

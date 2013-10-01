@@ -122,6 +122,8 @@ OZ.GraphScene.prototype.tick = function (delta) {
 };
 
 OZ.GraphScene.prototype.animate = function (delta) {
+	if (!this.isPulseEnabled) return;
+
 	this.lastPulseTime += delta;
 	
 	if (this.lastPulseTime > 5) {

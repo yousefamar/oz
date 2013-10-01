@@ -55,6 +55,8 @@ var OZ = {};
 			self.gui.init();
 			self.input.init();
 
+			document.body.style.visibility = 'visible';
+
 			setTimeout(tick, TICK_INTERVAL_MS);
 			requestAnimationFrame(render);
 		});

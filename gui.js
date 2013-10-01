@@ -7,12 +7,14 @@ OZ.gui = {
 		//statsTick.domElement.style.top = 0;
 		//statsRender.domElement.style.zIndex = 100;
 		//statsRender.setMode(1);
-		overlay.appendChild(this.statsTick.domElement);
+		
 		this.statsRender = new Stats();
 		//statsRender.domElement.style.position = 'absolute';
 		//statsRender.domElement.style.top = 0;
 		//statsRender.domElement.style.zIndex = 100;
 		//statsRender.setMode(1);
-		overlay.appendChild(this.statsRender.domElement);
+		
+		overlay.insertBefore(this.statsRender.domElement, overlay.firstChild);
+		overlay.insertBefore(this.statsTick.domElement, overlay.firstChild);
 	}
 };
