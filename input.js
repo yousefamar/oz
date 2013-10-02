@@ -7,6 +7,7 @@ OZ.input = {
 		document.addEventListener('mouseup', this.mouseup, false);
 		document.addEventListener('touchend', function (event) { this.mouseup(event.targetTouches[0]); }, false);
 		document.addEventListener('mousewheel', this.mousewheel,false);
+		document.addEventListener('DOMMouseScroll', this.mousewheel, false);
 	},
 
 	isMouseDown: false,
@@ -30,7 +31,7 @@ OZ.input = {
 			var mouseX = event.offsetX||event.layerX||0;
 			var mouseY = event.offsetY||event.layerY||0;
 
-			if (event.which) {
+			if (OZ.input.isMouseDown) {
 				/* Rotate camera around focused node */
 
 				// TODO: Retain angular velocity.
@@ -70,7 +71,7 @@ OZ.input = {
 	mousewheel: function (event) {
 		event.preventDefault();
 
-		OZ.camera.position.z -= event.wheelDeltaY/12;
+		OZ.camera.position.z -= event.wheelDeltaY/12 || -event.detail*4;
 
 		OZ.camera.position.z = OZ.camera.position.z < 10 ? 10 : OZ.camera.position.z > 200 ? 200 : OZ.camera.position.z;
 	}
